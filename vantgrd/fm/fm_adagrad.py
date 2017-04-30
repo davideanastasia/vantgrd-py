@@ -14,7 +14,8 @@ from vantgrd.common import logloss, sigmoid
 
 
 class FMWithAdagrad(BaseEstimator, ClassifierMixin):
-    def __init__(self, eta=0.001, k0=True, k1=True, reg0=.0, regw=.0, regv=.0, n_factors=2, epochs=1, rate=10000):
+    def __init__(self, eta=0.001, k0=True, k1=True, reg0=.0, regw=.0, regv=.0, n_factors=2, epochs=1, rate=10000,
+                 class_weight=None):
         self.eta = eta
 
         self.k0 = k0
@@ -29,7 +30,7 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         self.epochs = epochs
         self.rate = rate
 
-        self.class_weight = None  # class_weight
+        self.class_weight = class_weight
         self.classes_ = None
 
         self.log_likelihood_ = 0

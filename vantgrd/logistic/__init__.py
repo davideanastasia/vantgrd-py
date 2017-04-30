@@ -1,0 +1,3 @@
+from .logistic_regression_ftrl import LogisticRegressionFTRL
+from .logistic_regression_adagrad import LogisticRegressionWithAdagrad
+from .logistic_regression_adadelta import LogisticRegressionWithAdadelta

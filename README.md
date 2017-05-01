@@ -1,4 +1,4 @@
-## vantgrd
+## vantgrd (for Python)
 
 # Introduction
 
@@ -15,6 +15,7 @@ idea** (weka, mllib, sklearn and so on), but understand what's going on
 inside it is even better, in my opinion.
 
 # Available algorithms
+
 - Logistic Regression
     * with Adagrad optimiser
     * with Adadelta optimiser
@@ -26,7 +27,6 @@ inside it is even better, in my opinion.
 # Datasets
 
 - http://archive.ics.uci.edu/ml/datasets.html
-- Adform Click Prediction: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/TADBY7
 
 # References and interesting links
 

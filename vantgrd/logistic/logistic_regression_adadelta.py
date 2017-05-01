@@ -12,7 +12,7 @@ from vantgrd.common import ClassificationTrainTracker
 
 
 class LogisticRegressionWithAdadelta(BaseEstimator, ClassifierMixin):
-    def __init__(self, rho=0.9, regw=.0, epochs=1, rate=1000, class_weight=None):
+    def __init__(self, rho=0.9, regw=.01, epochs=1, rate=1000, class_weight=None):
         self.rho = rho
         self.regw = regw
 

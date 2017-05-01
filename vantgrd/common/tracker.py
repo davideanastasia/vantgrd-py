@@ -5,7 +5,7 @@ class ClassificationTrainTracker:
     def __init__(self, rate=0):
         self.rate = rate
 
-        self.log_likelihood_ = 0
+        self.log_likelihood_ = 0.
         self.loss_ = []
 
         self.current_sample_ = 0
@@ -18,7 +18,7 @@ class ClassificationTrainTracker:
         self.end_epoch_time_ = None
 
     def clear(self):
-        self.log_likelihood_ = 0
+        self.log_likelihood_ = 0.
         self.loss_ = []
 
         self.current_sample_ = 0
@@ -36,8 +36,8 @@ class ClassificationTrainTracker:
     def end_train(self):
         self.end_train_time_ = datetime.now()
         if self.rate > 0:
-            print(' --- TRAINING FINISHED IN {0} SECONDS WITH LOSS {1:.2f} ---'.format(
-                (self.end_train_time_ - self.start_train_time_).seconds, self.log_likelihood_))
+            print(' --- TRAINING FINISHED IN {0} SECONDS WITH LOSS {1:.2f} ---'.format((self.end_train_time_ - self.start_train_time_).seconds,
+                                                                                       self.log_likelihood_/self.current_sample_))
 
     def start_epoch(self, n_epoch):
         self.current_epoch_ = n_epoch
@@ -59,7 +59,7 @@ class ClassificationTrainTracker:
         self.log_likelihood_ += log_likelihood
         if self.rate > 0 and self.current_sample_ % self.rate == 0:
             # Append to the loss list.
-            self.loss_.append(self.log_likelihood_)
+            self.loss_.append(self.log_likelihood_/self.current_sample_)
 
             # Print all the current information
             print('Epoch: {0:3} | '

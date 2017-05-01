@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, roc_curve, auc, confusion_matrix
 
-from vantgrd.datasets import read_pima_indians_diabetes, min_max_scale, normalize_data
+from vantgrd.datasets import read_pima_indians_diabetes, normalize_data
 from vantgrd.logistic import LogisticRegressionWithAdadelta, LogisticRegressionWithAdagrad
 from vantgrd.fm import FMWithAdagrad, FMWithSGD
 
@@ -17,7 +17,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random
 
 # usage with normalized data
 # lr = FMWithSGD(eta=0.0005, n_factors=2, epochs=50, rate=1000)
-lr = FMWithAdagrad(eta=.01, k0=False, k1=True, regw=.01, regv=.01, n_factors=3, epochs=15, rate=500)
+lr = FMWithAdagrad(eta=.01, k0=False, k1=True, regw=.01, regv=.01, n_factors=3, epochs=50, rate=500)
 # lr = LogisticRegressionWithAdagrad(eta=0.25, epochs=50, rate=1000)
 # lr = LogisticRegressionWithAdadelta(rho=0.8, epochs=50, regw=.001, rate=1000)
 lr.fit(X_train, y_train)

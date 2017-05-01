@@ -1,7 +1,6 @@
 import numpy as np
 
-from math import fabs, sqrt, exp, log
-from datetime import datetime
+from math import fabs, sqrt
 
 
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -14,7 +13,7 @@ from vantgrd.common import ClassificationTrainTracker
 
 
 class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
-    def __init__(self, alpha=0.05, beta=0.05, l1=0.001, l2=0.001, epochs=1, rate=50000, class_weight=None):
+    def __init__(self, alpha=0.05, beta=0.05, l1=.01, l2=.01, epochs=1, rate=50000, class_weight=None):
         self.alpha = alpha
         self.beta = beta
         self.l1 = l1
@@ -136,7 +135,7 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
         # print w
 
         for t in xrange(n_samples):
-            x = X[t]
+            x = X[t, :]
             wtx = np.dot(w, x)
             p = sigmoid(wtx)
             y_test_predict[t] = 0. if p < 0.5 else 1.

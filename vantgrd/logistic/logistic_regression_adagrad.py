@@ -14,7 +14,7 @@ from vantgrd.common import ClassificationTrainTracker
 
 
 class LogisticRegressionWithAdagrad(BaseEstimator, ClassifierMixin):
-    def __init__(self, eta=0.001, regw=0.01, epochs=1, rate=50000):
+    def __init__(self, eta=.001, regw=.01, epochs=1, rate=50000):
         self.eta = eta
         self.regw = regw
 

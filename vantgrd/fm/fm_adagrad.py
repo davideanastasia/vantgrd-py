@@ -1,8 +1,5 @@
 import numpy as np
-import random as rnd
 
-from collections import Counter
-from datetime import datetime
 from math import exp, sqrt
 
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -10,7 +7,8 @@ from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
-from vantgrd.common import logloss, sigmoid
+from vantgrd.common import logloss, sigmoid, compute_class_weight
+from vantgrd.common import ClassificationTrainTracker
 
 
 class FMWithAdagrad(BaseEstimator, ClassifierMixin):
@@ -28,14 +26,10 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         self.n_factors = n_factors
 
         self.epochs = epochs
-        self.rate = rate
 
         self.class_weight = class_weight
         self.classes_ = None
 
-        self.log_likelihood_ = 0
-        self.loss_ = []
-
         self.X_ = None
         self.y_ = None
 
@@ -48,22 +42,13 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         self.EV_ = None
 
         self.fit_flag_ = False
+        self.train_tracker_ = ClassificationTrainTracker(rate)
 
     def _clear_params(self):
-        """
-        If the fit method is called multiple times, all trained parameters
-        must be cleared allowing for a fresh start. This function simply
-        resets everything back to square one.
-        :return: Nothing
-        """
-
         # All models parameters are set to their original value (see __init__ description)
         self.classes_ = None
         self.class_weight_ = None
 
-        self.log_likelihood_ = 0
-        self.loss_ = []
-
         self.X_ = None
         self.y_ = None
 
@@ -76,15 +61,14 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         self.EV_ = None
 
         self.fit_flag_ = False
+        self.train_tracker_.clear()
+
+    def _init_model(self):
+        pass
 
     def _update_class_weight(self, _X, _y):
         if self.class_weight is None:
-            c = Counter(_y)
-            n_samples = _y.size
-            self.class_weight_ = {0: float(c[1.0])/c[0.0], 1: 1.0}
-            # self.class_weight_ = {0.0: float(c[1.0]) / n_samples, 1.0: float(c[0.0]) / n_samples}
-
-            print self.class_weight_
+            self.class_weight_ = compute_class_weight(_y)
         else:
             self.class_weight_ = self.class_weight
 
@@ -151,8 +135,7 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
 
         return result
 
-    def _train(self, X, y, n_iter, n_samples, n_features):
-        start_time = datetime.now()
+    def _train(self, X, y, n_samples, n_features):
         iter_idx = np.arange(n_samples)
         np.random.shuffle(iter_idx)
 
@@ -166,24 +149,10 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
             p = self._predict_with_feedback(curr_x, g_sum, g_sum_sqr)
 
             # TODO: multiplier can go out of control if the learning rate is too big
-            multiplier = -curr_y_adj * (1. - 1./(1. + exp(-curr_y_adj*(p + rnd.gauss(0, 0.05))))) * self.class_weight_[curr_y]
+            multiplier = -curr_y_adj * (1. - 1./(1. + exp(-curr_y_adj*p))) * self.class_weight_[curr_y]
+            log_likelihood = logloss(p, curr_y)
 
-            self.log_likelihood_ += logloss(p, curr_y)
-
-            t_adj = (n_iter * n_samples) + t + 1
-            if self.rate > 0 and t_adj % self.rate == 0:
-                # Append to the loss list.
-                self.loss_.append(self.log_likelihood_)
-
-                # Print all the current information
-                print('Epoch: {0:3} | '
-                      'Training Samples: {1:9} | '
-                      'Loss: {2:11.2f} | '
-                      'LossAdj: {3:8.5f} | '
-                      'Time taken: {4:4} seconds'.format(n_iter, t_adj, self.log_likelihood_,
-                                                         float(self.log_likelihood_) / t_adj,
-                                                         (datetime.now() - start_time).seconds))
-
+            self.train_tracker_.track(log_likelihood)
             self._update(curr_x, g_sum, multiplier)
 
     def fit(self, X, y):
@@ -197,11 +166,8 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         self.X_ = X
         self.y_ = y
 
-        total_time = datetime.now()
-
         # setup parameters
         n_samples, n_features = X.shape
-
         if self.w_ is None:
             self.Ew0_ = 0
             self.w0_ = 0
@@ -213,22 +179,13 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
             self.V_ = np.random.normal(0, 0.1, (self.n_factors, n_features))
 
         self._update_class_weight(X, y)
+        self.train_tracker_.start_train()
+        for n_epoch in range(self.epochs):
+            self.train_tracker_.start_epoch(n_epoch)
+            self._train(X, y, n_samples, n_features)
+            self.train_tracker_.end_epoch()
 
-        for n_iter in range(self.epochs):
-            epoch_time = datetime.now()
-            # if self.rate > 0:
-            #     print('TRAINING EPOCH: {0:2}'.format(n_iter + 1))
-            #     print('-' * 18)
-
-            self._train(X, y, n_iter, n_samples, n_features)
-
-            # if self.rate > 0:
-            #     print('EPOCH {0:2} FINISHED IN {1} seconds'.format(
-            #         n_iter + 1, (datetime.now() - epoch_time).seconds))
-
-        if self.rate > 0:
-            print(' --- TRAINING FINISHED IN {0} SECONDS WITH LOSS {1:.2f} ---'.format(
-                (datetime.now() - total_time).seconds, self.log_likelihood_))
+        self.train_tracker_.end_train()
 
         # --- Fit Flag
         # Set fit_flag to true. If fit is called again this is will trigger

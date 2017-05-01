@@ -9,6 +9,3 @@ def logloss(p, y):
 def sigmoid(wtx):
     return 1. / (1. + exp(-max(min(wtx, 20.), -20.)))
 
-
-def rms(z):
-    return sqrt(z + 1e-8)

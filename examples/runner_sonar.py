@@ -5,23 +5,28 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, roc_curve, auc, confusion_matrix
 
 from vantgrd.datasets import read_connectionist_bench, normalize_data
-from vantgrd.logistic import LogisticRegressionWithAdadelta, LogisticRegressionWithAdagrad
+from vantgrd.logistic import LogisticRegressionWithAdadelta, LogisticRegressionWithAdagrad, LogisticRegressionFTRL
 from vantgrd.fm import FMWithAdagrad, FMWithSGD
 
 mean_fpr = np.linspace(0, 1, 200)
+rate = 500
+epochs = 50
+cw = {0: 1., 1: 1.}
 
 X, y = read_connectionist_bench('data/connectionist-bench/sonar.all-data')
 X = normalize_data(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
 
-# usage with normalized data
-# lr = FMWithSGD(eta=0.0005, n_factors=5, epochs=50, rate=1000)
-lr = FMWithAdagrad(eta=.025, k0=True, k1=True, regw=.01, regv=.01, n_factors=4, epochs=50, rate=500,
-                   class_weight={0: 1., 1: 1.})
-# lr = LogisticRegressionWithAdagrad(eta=0.25, epochs=50, rate=1000)
-# lr = LogisticRegressionWithAdadelta(rho=0.8, epochs=50, regw=.001, rate=1000)
+# lr = FMWithSGD(eta=.01, k0=True, k1=True, regw=.01, regv=.01, n_factors=4, epochs=epochs, rate=rate, class_weight=cw))
+lr = FMWithAdagrad(eta=.025, k0=True, k1=True, regw=.01, regv=.01, n_factors=4, epochs=epochs, rate=rate, class_weight=cw)
+# lr = LogisticRegressionWithAdagrad(eta=0.25, epochs=epochs, rate=rate, class_weight=cw))
+# lr = LogisticRegressionWithAdadelta(rho=0.8, regw=.001, epochs=epochs, rate=rate, class_weight=cw))
+# lr = LogisticRegressionFTRL(epochs=epochs, rate=rate, class_weight=cw))
 lr.fit(X_train, y_train)
+
+print lr.class_weight_
+print lr.class_weight
 
 y_pred = lr.predict(X_test)
 print classification_report(y_test, y_pred)

@@ -7,8 +7,9 @@ from sklearn.model_selection import train_test_split
 
 from vantgrd.logistic import LogisticRegressionFTRL, \
     LogisticRegressionWithAdagrad, LogisticRegressionWithAdadelta
+from vantgrd.fm import FMWithAdagrad
 
-
+epochs = 1
 mean_fpr = np.linspace(0, 1, 200)
 
 X, y = datasets.make_classification(n_samples=200000, n_features=25,
@@ -18,13 +19,14 @@ X, y = datasets.make_classification(n_samples=200000, n_features=25,
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
 models = [
-    LogisticRegressionWithAdagrad(eta=.01, epochs=2, rate=1000),
-    LogisticRegressionWithAdadelta(epochs=2, rate=1000),
-    LogisticRegressionFTRL(epochs=2, rate=1000)
+    LogisticRegressionWithAdagrad(eta=.01, epochs=epochs, rate=1000),
+    LogisticRegressionWithAdadelta(epochs=epochs, rate=1000),
+    LogisticRegressionFTRL(epochs=epochs, rate=1000),
+    FMWithAdagrad(eta=0.01, reg0=.01, regw=.01, regv=.01, rate=1000, epochs=epochs, n_factors=5)
 ]
 
-colors = {0: 'blue', 1: 'red', 2: 'black'}
-labels = {0: 'adagrad', 1: 'adadelta', 2: 'ftrl'}
+colors = {0: 'blue', 1: 'red', 2: 'black', 3: 'green'}
+labels = {0: 'adagrad', 1: 'adadelta', 2: 'ftrl', 3: 'fm-adagrad'}
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 2, 1)

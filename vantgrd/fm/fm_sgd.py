@@ -140,7 +140,7 @@ class FMWithSGD(BaseEstimator, ClassifierMixin):
 
         return result
 
-    def _train(self, X, y, n_iter, n_samples, n_features):
+    def _train(self, X, y, n_samples, _):
         iter_idx = np.arange(n_samples)
         np.random.shuffle(iter_idx)
 
@@ -153,7 +153,7 @@ class FMWithSGD(BaseEstimator, ClassifierMixin):
 
             p = self._predict_with_feedback(curr_x, g_sum, g_sum_sqr)
 
-            # TODO: multiplier can go out of control if the learning rate is too big
+            # TODO: multiplier can go out of control if the learning rate is too big, why?
             multiplier = -curr_y_adj * (1. - 1./(1. + exp(-curr_y_adj*p))) * self.class_weight_[curr_y]
             log_likelihood = logloss(p, curr_y)
 
@@ -182,14 +182,10 @@ class FMWithSGD(BaseEstimator, ClassifierMixin):
         self.train_tracker_.start_train()
         for n_epoch in range(self.epochs):
             self.train_tracker_.start_epoch(n_epoch)
-            self._train(X, y, n_epoch, n_samples, n_features)
+            self._train(X, y, n_samples, n_features)
             self.train_tracker_.end_epoch()
 
         self.train_tracker_.end_train()
-
-        # --- Fit Flag
-        # Set fit_flag to true. If fit is called again this is will trigger
-        # the call of _clean_params. See partial_fit for different usage.
         self.fit_flag_ = True
 
         return self

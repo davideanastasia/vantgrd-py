@@ -23,7 +23,7 @@ from sklearn.model_selection import train_test_split
 
 from vantgrd.logistic import LogisticRegressionFTRL, \
     LogisticRegressionWithAdagrad, LogisticRegressionWithAdadelta
-from vantgrd.fm import FMWithAdagrad
+from vantgrd.fm import FMWithAdagrad, FMWithSGD
 
 epochs = 1
 mean_fpr = np.linspace(0, 1, 200)
@@ -38,11 +38,12 @@ models = [
     LogisticRegressionWithAdagrad(eta=.01, epochs=epochs, rate=1000),
     LogisticRegressionWithAdadelta(epochs=epochs, rate=1000),
     LogisticRegressionFTRL(epochs=epochs, rate=1000),
-    FMWithAdagrad(eta=0.01, reg0=.01, regw=.01, regv=.01, rate=1000, epochs=epochs, n_factors=5)
+    FMWithAdagrad(eta=0.01, reg0=.01, regw=.01, regv=.01, rate=1000, epochs=epochs, n_factors=5),
+    FMWithSGD(eta=0.01, reg0=.01, regw=.01, regv=.01, rate=1000, epochs=epochs, n_factors=5)
 ]
 
-colors = {0: 'blue', 1: 'red', 2: 'black', 3: 'green'}
-labels = {0: 'adagrad', 1: 'adadelta', 2: 'ftrl', 3: 'fm-adagrad'}
+colors = {0: 'blue', 1: 'red', 2: 'black', 3: 'green', 4: 'yellow'}
+labels = {0: 'lr-adagrad', 1: 'lr-adadelta', 2: 'lr-ftrl', 3: 'lr-fm-adagrad', 4: 'fm-sgd'}
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 2, 1)

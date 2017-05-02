@@ -127,10 +127,6 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
             self.train_tracker_.end_epoch()
 
         self.train_tracker_.end_train()
-
-        # --- Fit Flag
-        # Set fit_flag to true. If fit is called again this is will trigger
-        # the call of _clean_params. See partial_fit for different usage.
         self.fit_flag_ = True
 
         return self

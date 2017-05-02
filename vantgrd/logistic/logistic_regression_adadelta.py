@@ -77,7 +77,7 @@ class LogisticRegressionWithAdadelta(BaseEstimator, ClassifierMixin):
                 self.Edx_[idxi] = self.rho * self.Edx_[idxi] + (1.0 - self.rho) * deltax * deltax
                 self.w_[idxi] += deltax
 
-    def _train(self, X, y, n_iter, n_samples, _):
+    def _train(self, X, y, n_samples, _):
         iter_idx = np.arange(n_samples)
         np.random.shuffle(iter_idx)
 
@@ -116,14 +116,10 @@ class LogisticRegressionWithAdadelta(BaseEstimator, ClassifierMixin):
         self.train_tracker_.start_train()
         for epoch in range(self.epochs):
             self.train_tracker_.start_epoch(epoch)
-            self._train(X, y, epoch, n_samples, n_features)
+            self._train(X, y, n_samples, n_features)
             self.train_tracker_.end_epoch()
 
         self.train_tracker_.end_train()
-
-        # --- Fit Flag
-        # Set fit_flag to true. If fit is called again this is will trigger
-        # the call of _clean_params. See partial_fit for different usage.
         self.fit_flag_ = True
 
         return self

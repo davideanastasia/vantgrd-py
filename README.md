@@ -5,10 +5,10 @@
 In the last year, I have rediscover an interesting in machine learning,
 many years after the "Artificial Intelligence" course at the University
 of Pisa. So I took the chance the implement a few basic ML algorithms,
-like Logistic Regression and Factorization Machine using Python, using
-this project as a playground to learn Python as well.
+like Logistic Regression and Factorization Machines, using this project
+as a playground to learn Python as well.
 
-I believe this repo will be interesting for those people that like to
+I believe this repo will be interesting for those who like to
 understand not only what works, but also why it works. **Using a more
 established ML Library for a production workload is definitely a better
 idea** (weka, mllib, sklearn and so on), but understand what's going on

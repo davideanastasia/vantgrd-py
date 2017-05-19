@@ -22,7 +22,7 @@ inside it is even better, in my opinion.
     * with FTRL Proximal optimiser
 - Factorization Machine (Binary Classification)
     * with Stochastic Gradient Descent optimiser
-    * with Adadelta optimiser
+    * with Adagrad optimiser
 
 # Datasets
 
@@ -38,3 +38,5 @@ inside it is even better, in my opinion.
 - https://github.com/saiias/Adadelta/
 - http://www.libfm.org
 - https://github.com/srendle/libfm
+- https://github.com/chenhuang-learn/ftrl
+- https://www.kaggle.com/qqgeogor/ftrl-minibatch-campatible-with-sklearn

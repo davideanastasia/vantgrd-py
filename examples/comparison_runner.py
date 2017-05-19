@@ -43,7 +43,7 @@ models = [
 ]
 
 colors = {0: 'blue', 1: 'red', 2: 'black', 3: 'green', 4: 'yellow'}
-labels = {0: 'lr-adagrad', 1: 'lr-adadelta', 2: 'lr-ftrl', 3: 'lr-fm-adagrad', 4: 'fm-sgd'}
+labels = {0: 'lr-adagrad', 1: 'lr-adadelta', 2: 'lr-ftrl', 3: 'fm-adagrad', 4: 'fm-sgd'}
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 2, 1)

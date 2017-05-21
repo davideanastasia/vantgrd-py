@@ -24,6 +24,10 @@ inside it is even better, in my opinion.
     * with Stochastic Gradient Descent optimiser
     * with Adagrad optimiser
 
+# License
+
+Code in this project is released under the Apache 2.0 license.
+
 # Datasets
 
 - http://archive.ics.uci.edu/ml/datasets.html

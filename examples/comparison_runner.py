@@ -28,7 +28,7 @@ mean_fpr = np.linspace(0, 1, 200)
 
 X, y = datasets.make_classification(n_samples=200000, n_features=25,
                                     n_informative=7, n_redundant=5, n_repeated=3,
-                                    random_state=42, weights=[0.77, 0.23])
+                                    random_state=42, weights=[0.92, 0.08])
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 

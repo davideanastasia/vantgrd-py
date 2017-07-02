@@ -20,6 +20,16 @@ def logloss(p, y):
     return -log(p) if y == 1. else -log(1. - p)
 
 
-def sigmoid(wtx):
-    return 1. / (1. + exp(-max(min(wtx, 20.), -20.)))
-
+def sigmoid(x):
+    """
+    Numerically-stable sigmoid function
+    http://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
+    """
+    if x >= 0:
+        z = exp(-x)
+        return 1 / (1 + z)
+    else:
+        # if x is less than zero then z will be small, denom can't be
+        # zero because it's 1+z.
+        z = exp(x)
+        return z / (1 + z)

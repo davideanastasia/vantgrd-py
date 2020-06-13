@@ -130,7 +130,7 @@ class LogisticRegressionWithAdadelta(BaseEstimator, ClassifierMixin):
         n_samples = X.shape[0]
         y_test_predict = np.zeros(n_samples)
 
-        for t in xrange(n_samples):
+        for t in range(n_samples):
             wtx = np.dot(X[t, :], self.w_)
             p = sigmoid(wtx)
             y_test_predict[t] = 0. if p < 0.5 else 1.
@@ -143,7 +143,7 @@ class LogisticRegressionWithAdadelta(BaseEstimator, ClassifierMixin):
         X = check_array(X)
 
         y = np.dot(X, self.w_)
-        for idxi in xrange(y.size):
+        for idxi in range(y.size):
             y[idxi] = sigmoid(y[idxi])
 
         return y

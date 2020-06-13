@@ -66,7 +66,7 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
 
     def _update(self, y, p, x, w):
         d = (p - y)
-        for idxi in xrange(len(x)):  # for idxi, xi in enumerate(x):
+        for idxi in range(len(x)):  # for idxi, xi in enumerate(x):
             g = d * x[idxi]
             s = (sqrt(self.n_[idxi] + g * g) - sqrt(self.n_[idxi])) / self.alpha
 
@@ -89,7 +89,7 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
 
             wtx = 0.
             curr_w = {}
-            for idxi in xrange(n_features):
+            for idxi in range(n_features):
                 curr_w[idxi] = self._get_w(idxi)
                 wtx += (curr_w[idxi] * curr_x[idxi])
 
@@ -138,12 +138,12 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
         y_test_predict = np.zeros(n_samples)
 
         w = np.zeros(n_features)
-        for idxi in xrange(n_features):
+        for idxi in range(n_features):
             w[idxi] = self._get_w(idxi)
 
         # print w
 
-        for t in xrange(n_samples):
+        for t in range(n_samples):
             x = X[t, :]
             wtx = np.dot(w, x)
             p = sigmoid(wtx)
@@ -158,11 +158,11 @@ class LogisticRegressionFTRL(BaseEstimator, ClassifierMixin):
         n_samples, n_features = X.shape
 
         w = np.zeros(n_features)
-        for idxi in xrange(n_features):
+        for idxi in range(n_features):
             w[idxi] = self._get_w(idxi)
 
         y = np.dot(X, w)
-        for idxi in xrange(y.size):
+        for idxi in range(y.size):
             y[idxi] = sigmoid(y[idxi])
 
         return y

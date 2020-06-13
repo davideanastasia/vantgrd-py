@@ -93,14 +93,14 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
             self.w0_ -= (self.eta / sqrt(self.Ew0_ + 1e-8)) * (multiplier + 2. * self.reg0 * self.w0_)
 
         if self.k1:
-            for idx in xrange(curr_x.size):
+            for idx in range(curr_x.size):
                 if curr_x[idx] != 0.0:
                     grad = multiplier * curr_x[idx]
                     self.Ew_[idx] += (grad * grad)
                     self.w_[idx] -= (self.eta / sqrt(self.Ew_[idx] + 1e-8)) * (grad + 2. * self.regw * self.w_[idx])
 
-        for f in xrange(self.n_factors):
-            for idx in xrange(curr_x.size):
+        for f in range(self.n_factors):
+            for idx in range(curr_x.size):
                 if curr_x[idx] != 0.0:
                     grad = multiplier * curr_x[idx] * (g_sum[f] - self.V_[f, idx] * curr_x[idx])
                     self.EV_[f, idx] += (grad * grad)
@@ -114,12 +114,12 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         if self.k1:
             result += np.dot(self.w_, curr_x)
 
-        for f in xrange(self.n_factors):
+        for f in range(self.n_factors):
             # v = self.V_[f, :]
             # g_sum[f] = float(0.)
             # g_sum_sqr[f] = float(0.)
             #
-            # for idx in xrange(curr_x.size):
+            # for idx in range(curr_x.size):
             #     d = v[idx] * curr_x[idx]
             #     g_sum[f] += d
             #     g_sum_sqr[f] += (d * d)
@@ -140,7 +140,7 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         if self.k1:
             result += np.dot(self.w_, curr_x)
 
-        for f in xrange(self.n_factors):
+        for f in range(self.n_factors):
             d = self.V_[f, :] * curr_x
             g_sum = np.sum(d)
             g_sum_sqr = np.dot(d, d)
@@ -215,7 +215,7 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         g_sum = np.zeros(self.n_factors)
         g_sum_sqr = np.zeros(self.n_factors)
 
-        for t in xrange(n_samples):
+        for t in range(n_samples):
             p = sigmoid(self._predict_with_feedback(X[t, :], g_sum, g_sum_sqr))
             y_test_predict[t] = 0. if p < 0.5 else 1.
 
@@ -232,7 +232,7 @@ class FMWithAdagrad(BaseEstimator, ClassifierMixin):
         g_sum = np.zeros(self.n_factors)
         g_sum_sqr = np.zeros(self.n_factors)
 
-        for t in xrange(n_samples):
+        for t in range(n_samples):
             y_test_predict[t] = sigmoid(self._predict_with_feedback(X[t, :], g_sum, g_sum_sqr))
 
         return y_test_predict

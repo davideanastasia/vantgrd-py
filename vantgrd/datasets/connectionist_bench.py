@@ -23,7 +23,7 @@ def read_connectionist_bench(filename):
         for line in i_file:
             tokens = line.strip().split(',')
 
-            X_.append([float(tokens[x]) for x in xrange(0, 60)])
+            X_.append([float(tokens[x]) for x in range(0, 60)])
             y_.append(0. if tokens[60] == 'R' else 1.)
 
     # return np.asarray(X_, dtype=np.float64), np.asarray(y_, dtype=np.float64)
